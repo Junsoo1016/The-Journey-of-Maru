@@ -13,14 +13,14 @@ margin: 0;
 }
 
 #maru_image {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     margin-bottom: 20px;
     /* box-shadow: 0 30px 40px rgba(0,0,0,.2); */
 }
 canvas {
-    border: 1px solid rgb(0, 0, 0);
+    border: 1px solid rgb(159, 159, 159);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -29,19 +29,23 @@ canvas {
 }  
 
 #start {
-    padding: 30px 100px;
+    padding: 20px 60px;
     margin-top: 30px;
     font-size: 30px;
-    background-color: red;
+    font-family: 'roboto';
+    font-weight: 500;
+    background-color: rgb(131, 131, 131);
     color: white;
     border-radius: 30px;
 }
 
-#reset {
-    padding: 30px 100px;
-    margin-top: 30px;
+#restart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 30px;
-    background-color: red;
-    color: white;
-    border-radius: 30px;
+    color: rgb(166, 166, 166);
+    display: none;
+    z-index: 100;
 }

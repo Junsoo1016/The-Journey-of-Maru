@@ -18,13 +18,22 @@ const title = document.createElement('a')
 title.setAttribute('id', 'title')
 title.innerText = 'The Journey of Maru'
 board.appendChild(title)
-title.style.fontSize = '58px'
+title.style.fontSize = '46px'
 title.style.fontFamily = 'Bungee Shade'
 
 const startBtn = document.createElement('button')
 startBtn.setAttribute('id', 'start')
-startBtn.innerText = 'Start'
+startBtn.innerText = 'START'
 board.appendChild(startBtn)
+
+const restartBtn = document.createElement('a')
+restartBtn.setAttribute('id', 'restart')
+body.appendChild(restartBtn)
+const restartIcon = document.createElement('i')
+restartIcon.setAttribute('class', 'fa-solid fa-rotate-right')
+restartBtn.appendChild(restartIcon)
+const restartBtn2 = document.querySelector('#restart')
+console.log(restartBtn2);
 
 // start canvas
 const canvas = document.createElement('canvas')
@@ -32,15 +41,15 @@ canvas.setAttribute('id', canvas)
 body.appendChild(canvas)
 
 let ctx = canvas.getContext('2d')
-
-function drawGround() {
-ctx.beginPath()
-ctx.moveTo(0, 50)
-ctx.lineTo(1000, 50)
-ctx.stroke()
+function makeGround(){
+ctx.beginPath();
+ctx.moveTo(0, 290);
+ctx.lineTo(1000, 290);
+ctx.stroke();
+ctx.lineWidth = 0.5;
 }
 
-canvas.width = window.innerWidth - 600
+canvas.width = window.innerWidth - 500
 canvas.height = window.innerHeight -300
 
 const img1 = new Image()
@@ -117,10 +126,13 @@ document.addEventListener('keydown', function(e){
 
 
 function playFrames() {
+
    animation = requestAnimationFrame(playFrames)
     timer++
     
     ctx.clearRect(0,0, canvas.width, canvas.height)
+    
+    makeGround()
 
     if(timer % 60 === 0){
     const obstacle = new Obstacle()
@@ -181,7 +193,18 @@ function playFrames() {
 
 startBtn.addEventListener('click', () => {
     board.style.display = 'none'
-    drawGround()
+    playFrames()
+})
+
+restartBtn2.addEventListener('click', () => {
+    console.log('clicked');
+    restartBtn2.style.display = 'none'
+    timer = 0
+    jumpTimer = 0
+    obstacleArr = []
+    boneArr = []
+    cloudArr = []
+    cloud2Arr = []
     playFrames()
 })
 
@@ -192,6 +215,8 @@ const collisionCheck = (Maru, obstacle) => {
     if (xGap < 0 && yGap < 0) {
         ctx.clearRect(0,0, canvas.width, canvas.height)
         cancelAnimationFrame(animation)
+        restartBtn.style.display = 'block'
+        makeGround()
     }
 }
 
