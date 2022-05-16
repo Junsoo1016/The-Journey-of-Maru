@@ -25,38 +25,72 @@ const startBtn = document.createElement('button')
 startBtn.setAttribute('id', 'start')
 startBtn.innerText = 'Start'
 board.appendChild(startBtn)
-startBtn.style.padding = '30px'
-startBtn.style.marginTop = '50px'
-startBtn.style.fontSize = '36px'
-startBtn.style.backgroundColor = 'red'
-startBtn.style.color = 'white'
-startBtn.style.borderRadius = '50%'
-startBtn.style.boder = '2px'
 
+// start canvas
 const canvas = document.createElement('canvas')
 canvas.setAttribute('id', canvas)
 body.appendChild(canvas)
 
-const ctx = canvas.getContext('2d')
+let ctx = canvas.getContext('2d')
 
-canvas.width = window.innerWidth - 100
-canvas.height = window.innerHeight -100
+function drawGround() {
+ctx.beginPath()
+ctx.moveTo(0, 50)
+ctx.lineTo(1000, 50)
+ctx.stroke()
+}
+
+canvas.width = window.innerWidth - 600
+canvas.height = window.innerHeight -300
+
+const img1 = new Image()
+img1.src = 'https://www.linkpicture.com/q/dog.png'
+
+const cloud = new Image()
+cloud.src = 'https://i.ibb.co/Bw3gt6c/cloud.png'
 
 const Maru = {
     x : 10,
-    y : 200,
-    width : 50,
+    y : 250,
+    width : 60,
     height : 50,
     draw() {
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = 'white'
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(img1, this.x, this.y)
+    }
+}
+
+class Bone {
+    constructor(){
+        this.x = 1000
+        this.y = 250
+        this.width = 50
+        this.height = 50
+    }
+    draw() {
+        ctx.fillStyle = 'blue'
         ctx.fillRect(this.x, this.y, this.width, this.height)
     }
 }
-Maru.draw()
-class Cactus {
-    constructor(){
-        this.x = 500
-        this.y = 200
+
+class Cloud {
+    constructor(x, y, width, height){
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+    }
+    draw() {
+        ctx.fillStyle ='white'
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(cloud, this.x, this.y)
+    }    
+}
+class Obstacle {
+    constructor(x, y, width, height){
+        this.x = 1000
+        this.y = 250
         this.width = 50
         this.height = 50
     }
@@ -67,8 +101,12 @@ class Cactus {
 }
 
 let timer = 0
-let cactusArr = []
 let jumpTimer = 0
+let obstacleArr = []
+let boneArr = []
+let cloudArr = []
+let cloud2Arr = []
+let animation
 
 let jumping = false
 document.addEventListener('keydown', function(e){
@@ -79,28 +117,57 @@ document.addEventListener('keydown', function(e){
 
 
 function playFrames() {
-    requestAnimationFrame(playFrames)
+   animation = requestAnimationFrame(playFrames)
     timer++
     
     ctx.clearRect(0,0, canvas.width, canvas.height)
-    if(timer % 200 === 0){
-    const cactus = new Cactus()
-    cactusArr.push(cactus)
-}
-    cactusArr.forEach((cactus, i, o) => {
-        if(cactus.x < 0) {
+
+    if(timer % 60 === 0){
+    const obstacle = new Obstacle()
+    obstacleArr.push(obstacle)
+    }
+
+    obstacleArr.forEach((obstacle, i, o) => {
+        if(obstacle.x < 0) {
             o.splice(i, 1)
         }
-        cactus.x-=3 
-        cactus.draw()
+        obstacle.x -= 8 
+
+        collisionCheck(Maru, obstacle)
+
+        obstacle.draw()
     })
-    
+    if(timer % 200 === 0){
+        const cloud = new Cloud(800, 80, 50, 50)
+        cloudArr.push(cloud)
+    }
+
+    cloudArr.forEach((cloud, i, o) => {
+        if(cloud.x<0) {
+            o.splice(i, 1)
+        }
+        cloud.x -= 2
+        cloud.draw()
+    })
+    if(timer % 120 === 0){
+        const cloud2 = new Cloud(800, 150, 50, 50)
+        cloud2Arr.push(cloud2)
+    }
+
+    cloud2Arr.forEach((cloud2, i, o) => {
+        if(cloud2.x<0) {
+            o.splice(i, 1)
+        }
+        cloud2.x -= 2
+        cloud2.draw()
+    })
+
     if (jumping == true){
         Maru.y-=5
         jumpTimer++
     }
     if (jumping == false){
-        if(Maru.y < 200) {
+        if(Maru.y < 250) {
         Maru.y+=5
         }
     }
@@ -108,21 +175,24 @@ function playFrames() {
         jumping = false
         jumpTimer = 0
     }
-
+    canvas.style.display = 'block'
     Maru.draw()
 }
-playFrames()
 
-
-
-
-const startGame = () => {
+startBtn.addEventListener('click', () => {
     board.style.display = 'none'
+    drawGround()
+    playFrames()
+})
+
+//colision detection
+const collisionCheck = (Maru, obstacle) => {
+    xGap = obstacle.x - (Maru.x + Maru.width)
+    yGap = obstacle.y - (Maru.y + Maru.height)
+    if (xGap < 0 && yGap < 0) {
+        ctx.clearRect(0,0, canvas.width, canvas.height)
+        cancelAnimationFrame(animation)
+    }
 }
 
-const manuJump = () => {
-    Maru.style.transform = 'translateY(-100px)'
-}
-
-startBtn.addEventListener('click', startGame)
 
