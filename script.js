@@ -57,6 +57,10 @@ img1.src = 'https://www.linkpicture.com/q/dog.png'
 const img2 = new Image()
 img2.src = 'https://i.ibb.co/CBcLGZn/dog-motion-2.png'
 img2.setAttribute('class', 'img')
+const boneImage = new Image()
+boneImage.src = 'https://i.ibb.co/TkpqhJs/bone.png'
+const lion = new Image()
+lion.src = 'https://i.ibb.co/FhnHnsm/lionface.png'
 const imageFrameCount = 2
 const frameTime = 100
 const currentFrameTime = 0
@@ -73,16 +77,14 @@ const Maru = {
     runningTime: 0,
     draw() {
         if (this.running === true){
-        ctx.fillStyle = 'white'
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        // ctx.fillStyle = 'white'
+        // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img1, this.x, this.y)
-        this.runningTime = Date.now() + 5000
         this.running = false     
-    } else {
-        ctx.fillStyle = 'white'
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        } else {
+        // ctx.fillStyle = 'white'
+        // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img2, this.x, this.y)
-        this.runningTime = Date.now() + 5000
         this.running = true
     }}
 }
@@ -95,8 +97,9 @@ class Bone {
         this.height = 50
     }
     draw() {
-        ctx.fillStyle = 'blue'
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        // ctx.fillStyle = 'green'
+        // ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(boneImage, this.x, this.y)
     }
 }
 
@@ -121,8 +124,9 @@ class Obstacle {
         this.height = 50
     }
     draw() {
-        ctx.fillStyle ='green'
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        // ctx.fillStyle ='green'
+        // ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(lion, this.x, this.y)
     }    
 }
 
@@ -191,6 +195,21 @@ function playFrames() {
         cloud2.draw()
     })
 
+    if(timer % 200 === 0){
+        const bone = new Bone()
+        boneArr.push(bone)
+    }
+    boneArr.forEach((bone, i ,o) => {
+        if(bone.x < 0){
+            o.splice(i, 1)
+        }
+        bone.x -= 4
+
+        getBone(Maru, bone)
+
+        bone.draw()
+    })
+
     if (jumping == true){
         Maru.y-=5
         jumpTimer++
@@ -205,25 +224,9 @@ function playFrames() {
         jumpTimer = 0
     }
     canvas.style.display = 'block'
-    setInterval(Maru.draw(), 1000);
+    Maru.draw()
 }
 
-startBtn.addEventListener('click', () => {
-    board.style.display = 'none'
-    playFrames()
-})
-
-restartBtn2.addEventListener('click', () => {
-    console.log('clicked');
-    restartBtn2.style.display = 'none'
-    timer = 0
-    jumpTimer = 0
-    obstacleArr = []
-    boneArr = []
-    cloudArr = []
-    cloud2Arr = []
-    playFrames()
-})
 
 //colision detection
 const collisionCheck = (Maru, obstacle) => {
@@ -236,3 +239,45 @@ const collisionCheck = (Maru, obstacle) => {
         makeGround()
     }
 }
+
+let points = 0
+const pointBox = document.createElement('h1')
+pointBox.setAttribute('id', 'pointbox')
+document.body.appendChild(pointBox)
+pointBox.innerText = `Total Points: ${points}`
+
+
+function pointsAlert() {
+    ctx.fillText("+100", -60, 230)
+}
+
+const getBone = (Maru, bone) => {
+    xGap = bone.x - (Maru.x + Maru.width)
+    yGap = bone.x = (Maru.x + Maru.width)
+    if(xGap < 0 && yGap < 0) {
+        points += 100
+        boneArr.splice(i, 1)
+        pointsAlert()
+    }
+}
+
+console.log(points)
+
+startBtn.addEventListener('click', () => {
+    board.style.display = 'none'
+    pointBox.style.display = 'block'
+    playFrames()
+})
+
+restartBtn2.addEventListener('click', () => {
+    console.log('clicked');
+    restartBtn2.style.display = 'none'
+    timer = 0
+    jumpTimer = 0
+    points = 0
+    obstacleArr = []
+    boneArr = []
+    cloudArr = []
+    cloud2Arr = []
+    playFrames()
+})
