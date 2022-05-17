@@ -80,12 +80,16 @@ const Maru = {
         // ctx.fillStyle = 'white'
         // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img1, this.x, this.y)
-        this.running = false     
+        setTimeout(() => {
+            this.running = false     
+        }, 200)
         } else {
         // ctx.fillStyle = 'white'
         // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img2, this.x, this.y)
-        this.running = true
+        setTimeout(() => {
+            this.running = true
+        }, 200)
     }}
 }
 
@@ -132,6 +136,7 @@ class Obstacle {
 
 let timer = 0
 let jumpTimer = 0
+let landingTimer = 0
 let obstacleArr = []
 let boneArr = []
 let cloudArr = []
@@ -139,12 +144,13 @@ let cloud2Arr = []
 let animation
 let jumping = false
 
-document.addEventListener('keydown', function(e){
+document.addEventListener('keydown', startJump)
+
+function startJump(e) {
     if(e.code === 'Space') {
         jumping = true
     }
-})
-
+}
 
 function playFrames() {
 
@@ -209,20 +215,32 @@ function playFrames() {
 
         bone.draw()
     })
-
+    console.log(Maru.y);
     if (jumping == true){
+        document.removeEventListener('keydown', startJump)
+        console.log("Jumping is true");
         Maru.y-=5
         jumpTimer++
     }
-    if (jumping == false){
-        if(Maru.y < 250) {
-        Maru.y+=5
-        }
-    }
     if (jumpTimer > 25){
-        jumping = false
+        console.log("Jumping is greater than 25");
+        jumping = false 
         jumpTimer = 0
     }
+    if (jumping == false){
+        console.log("Jumping is false");
+        if(Maru.y < 250) {
+        Maru.y+=5
+        landingTimer++
+        } else {
+            document.addEventListener('keydown', startJump)
+
+        }
+    } 
+    // while (landingTimer < 25){
+    //     jumping = false;
+    //     landingTimer = 0;
+    // }
     canvas.style.display = 'block'
     Maru.draw()
 }
@@ -248,14 +266,19 @@ pointBox.innerText = `Total Points: ${points}`
 
 
 function pointsAlert() {
-    ctx.fillText("+100", -60, 230)
+    ctx.fillText("+100", 50, 230)
 }
 
 const getBone = (Maru, bone) => {
     xGap = bone.x - (Maru.x + Maru.width)
-    yGap = bone.x = (Maru.x + Maru.width)
-    if(xGap < 0 && yGap < 0) {
+    yGap = bone.y - (Maru.y + Maru.height)
+    console.log("xGap: ", xGap);
+    console.log("yGap: ", yGap);
+    // if((xGap < 0 && xGap > -20) && yGap === 0) {
+    if (xGap < 0 && yGap < 0) {
+        // console.log('getting bone');
         points += 100
+        pointBox.innerText = `Total Points: ${points}`
         boneArr.splice(i, 1)
         pointsAlert()
     }
