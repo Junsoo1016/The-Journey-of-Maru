@@ -54,6 +54,12 @@ canvas.height = window.innerHeight -300
 
 const img1 = new Image()
 img1.src = 'https://www.linkpicture.com/q/dog.png'
+const img2 = new Image()
+img2.src = 'https://i.ibb.co/CBcLGZn/dog-motion-2.png'
+img2.setAttribute('class', 'img')
+const imageFrameCount = 2
+const frameTime = 100
+const currentFrameTime = 0
 
 const cloud = new Image()
 cloud.src = 'https://i.ibb.co/Bw3gt6c/cloud.png'
@@ -63,11 +69,22 @@ const Maru = {
     y : 250,
     width : 60,
     height : 50,
+    running: true,
+    runningTime: 0,
     draw() {
+        if (this.running === true){
         ctx.fillStyle = 'white'
         ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img1, this.x, this.y)
-    }
+        this.runningTime = Date.now() + 5000
+        this.running = false     
+    } else {
+        ctx.fillStyle = 'white'
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(img2, this.x, this.y)
+        this.runningTime = Date.now() + 5000
+        this.running = true
+    }}
 }
 
 class Bone {
@@ -116,8 +133,8 @@ let boneArr = []
 let cloudArr = []
 let cloud2Arr = []
 let animation
-
 let jumping = false
+
 document.addEventListener('keydown', function(e){
     if(e.code === 'Space') {
         jumping = true
@@ -158,7 +175,7 @@ function playFrames() {
         if(cloud.x<0) {
             o.splice(i, 1)
         }
-        cloud.x -= 2
+        cloud.x -= 3
         cloud.draw()
     })
     if(timer % 120 === 0){
@@ -188,7 +205,7 @@ function playFrames() {
         jumpTimer = 0
     }
     canvas.style.display = 'block'
-    Maru.draw()
+    setInterval(Maru.draw(), 1000);
 }
 
 startBtn.addEventListener('click', () => {
@@ -219,5 +236,3 @@ const collisionCheck = (Maru, obstacle) => {
         makeGround()
     }
 }
-
-
