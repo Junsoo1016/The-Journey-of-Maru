@@ -77,14 +77,14 @@ const Maru = {
     runningTime: 0,
     draw() {
         if (this.running === true){
-        // ctx.fillStyle = 'white'
-        // ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.fillStyle = 'yellow'
+        ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img1, this.x, this.y)
         setTimeout(() => {
             this.running = false     
         }, 200)
         } else {
-        // ctx.fillStyle = 'white'
+        // ctx.fillStyle = 'orange'
         // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img2, this.x, this.y)
         setTimeout(() => {
@@ -136,7 +136,6 @@ class Obstacle {
 
 let timer = 0
 let jumpTimer = 0
-let landingTimer = 0
 let obstacleArr = []
 let boneArr = []
 let cloudArr = []
@@ -161,7 +160,7 @@ function playFrames() {
     
     makeGround()
 
-    if(timer % 60 === 0){
+    if(timer % 70 === 0){
     const obstacle = new Obstacle()
     obstacleArr.push(obstacle)
     }
@@ -170,14 +169,14 @@ function playFrames() {
         if(obstacle.x < 0) {
             o.splice(i, 1)
         }
-        obstacle.x -= 8 
+        obstacle.x -= 5 
 
         collisionCheck(Maru, obstacle)
 
         obstacle.draw()
     })
-    if(timer % 200 === 0){
-        const cloud = new Cloud(800, 80, 50, 50)
+    if(timer % 180 === 0){
+        const cloud = new Cloud(900, 90, 50, 50)
         cloudArr.push(cloud)
     }
 
@@ -189,7 +188,7 @@ function playFrames() {
         cloud.draw()
     })
     if(timer % 120 === 0){
-        const cloud2 = new Cloud(800, 150, 50, 50)
+        const cloud2 = new Cloud(900, 160, 50, 50)
         cloud2Arr.push(cloud2)
     }
 
@@ -197,7 +196,7 @@ function playFrames() {
         if(cloud2.x<0) {
             o.splice(i, 1)
         }
-        cloud2.x -= 2
+        cloud2.x -= 4
         cloud2.draw()
     })
 
@@ -209,7 +208,7 @@ function playFrames() {
         if(bone.x < 0){
             o.splice(i, 1)
         }
-        bone.x -= 4
+        bone.x -= 7
 
         getBone(Maru, bone)
 
@@ -218,23 +217,21 @@ function playFrames() {
     console.log(Maru.y);
     if (jumping == true){
         document.removeEventListener('keydown', startJump)
-        console.log("Jumping is true");
+        // console.log("Jumping is true")
         Maru.y-=5
         jumpTimer++
     }
     if (jumpTimer > 25){
-        console.log("Jumping is greater than 25");
+        // console.log("Jumping is greater than 25")
         jumping = false 
         jumpTimer = 0
     }
     if (jumping == false){
-        console.log("Jumping is false");
+        // console.log("Jumping is false")
         if(Maru.y < 250) {
         Maru.y+=5
-        landingTimer++
         } else {
             document.addEventListener('keydown', startJump)
-
         }
     } 
     // while (landingTimer < 25){
@@ -277,7 +274,7 @@ const getBone = (Maru, bone) => {
     // if((xGap < 0 && xGap > -20) && yGap === 0) {
     if (xGap < 0 && yGap < 0) {
         // console.log('getting bone');
-        points += 100
+        points += 10
         pointBox.innerText = `Total Points: ${points}`
         boneArr.splice(i, 1)
         pointsAlert()
@@ -298,6 +295,7 @@ restartBtn2.addEventListener('click', () => {
     timer = 0
     jumpTimer = 0
     points = 0
+    pointBox.innerText = `Total Points: ${points}`
     obstacleArr = []
     boneArr = []
     cloudArr = []
