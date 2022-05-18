@@ -2,6 +2,10 @@ const body = document.querySelector('body')
 body.style.background = 'white'
 body.style.margin = 0
 
+const container = document.createElement('div')
+document.body.appendChild(container)
+container.setAttribute('id', 'container')
+
 const board = document.createElement('div')
 board.setAttribute('id', 'board')
 body.appendChild(board)
@@ -35,6 +39,17 @@ restartBtn.appendChild(restartIcon)
 const restartBtn2 = document.querySelector('#restart')
 console.log(restartBtn2);
 
+function makeImageBoxes(num) {
+    for(i = 0 ; i < num ; i++) {
+        let cell = document.createElement('img')
+        container.appendChild(cell)
+        cell.setAttribute('class', 'imageBox')
+        cell.setAttribute('id', `img${i}`)
+        cell.src = 'https://i.ibb.co/Qnbb5Yg/dog-sit.png'
+    }
+}
+makeImageBoxes(10)
+
 // start canvas
 const canvas = document.createElement('canvas')
 canvas.setAttribute('id', canvas)
@@ -57,7 +72,7 @@ function drawBubble(ctx, x, y, w, h, radius)
   ctx.lineTo(r, y+h-radius);
   ctx.quadraticCurveTo(r, b, r-radius, b);
   ctx.lineTo(x+radius, b);
-  ctx.lineTo(x+radius/2, b+10);
+  ctx.lineTo(x+radius/2, b+8);
   ctx.lineTo(x+radius * 2, b);
   ctx.quadraticCurveTo(x, b, x, b-radius);
   ctx.lineTo(x, y+radius);
@@ -95,6 +110,7 @@ img2.src = 'https://i.ibb.co/CBcLGZn/dog-motion-2.png'
 img2.setAttribute('class', 'img')
 const img3 = new Image()
 img3.src = 'https://i.ibb.co/Qnbb5Yg/dog-sit.png'
+img3.setAttribute('id', 'img3')
 const boneImage = new Image()
 boneImage.src = 'https://i.ibb.co/TkpqhJs/bone.png'
 const lion = new Image()
@@ -323,12 +339,14 @@ const collisionCheck = (Maru, obstacle) => {
     }
 }
 
+
+
 let points = 0
+
 const pointBox = document.createElement('h1')
 pointBox.setAttribute('id', 'pointbox')
 document.body.appendChild(pointBox)
 pointBox.innerText = `Total Points: ${points}`
-
 
 function pointsAlert() {
     ctx.fillText("+100", 50, 230)
@@ -351,6 +369,7 @@ const getBone = (Maru, bone) => {
 
 startBtn.addEventListener('click', () => {
     board.style.display = 'none'
+    container.style.display = 'none'
     pointBox.style.display = 'block'
     playInit()
 })
