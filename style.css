@@ -9,6 +9,7 @@ h1 {
     text-align: center;
     margin-top: 100px;
     display: none;
+    color:rgb(159, 159, 159)
 }
 
 #board {
@@ -61,3 +62,16 @@ canvas {
 .img2 {
    content:url(https://i.ibb.co/CBcLGZn/dog-motion-2.png) 
 }
+
+.bubbletext
+{
+  position: absolute;
+  left: 315px;
+  top: 220px;
+  width:220px;
+  height:200px;
+  padding:76px 8px 8px 8px;
+  text-align:center;
+}
+
+x, y+radius

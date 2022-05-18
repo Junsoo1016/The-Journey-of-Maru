@@ -40,13 +40,49 @@ const canvas = document.createElement('canvas')
 canvas.setAttribute('id', canvas)
 body.appendChild(canvas)
 
+
+
+function drawBubble(ctx, x, y, w, h, radius)
+{
+  var r = x + w;
+  var b = y + h;
+  ctx.beginPath();
+  ctx.strokeStyle="grey";
+  ctx.lineWidth="1";
+  ctx.moveTo(x+radius, y);
+//   ctx.lineTo(x+radius/2, y-10);
+//   ctx.lineTo(x+radius * 2, y);
+  ctx.lineTo(r-radius, y);
+  ctx.quadraticCurveTo(r, y, r, y+radius);
+  ctx.lineTo(r, y+h-radius);
+  ctx.quadraticCurveTo(r, b, r-radius, b);
+  ctx.lineTo(x+radius, b);
+  ctx.lineTo(x+radius/2, b+10);
+  ctx.lineTo(x+radius * 2, b);
+  ctx.quadraticCurveTo(x, b, x, b-radius);
+  ctx.lineTo(x, y+radius);
+  ctx.quadraticCurveTo(x, y, x+radius, y);
+  ctx.stroke();
+}
+function dispQuote() 
+{
+  drawBubble(ctx, 70,140,220, 90, 20);
+}
+
 let ctx = canvas.getContext('2d')
 function makeGround(){
-ctx.beginPath();
-ctx.moveTo(0, 290);
-ctx.lineTo(1000, 290);
-ctx.stroke();
-ctx.lineWidth = 0.5;
+ctx.beginPath()
+ctx.moveTo(0, 290)
+ctx.lineTo(1000, 290)
+ctx.stroke()
+ctx.lineWidth = 0.5
+}
+
+function quote(){
+    ctx.font = "14px roboto"
+    ctx.fillText("Press space bar to jump,", 105, 170)
+    ctx.fillText("and avoid touching lions!", 105, 190)
+    ctx.fillText("You get points for bones.", 105, 210)
 }
 
 canvas.width = window.innerWidth - 500
@@ -57,6 +93,8 @@ img1.src = 'https://www.linkpicture.com/q/dog.png'
 const img2 = new Image()
 img2.src = 'https://i.ibb.co/CBcLGZn/dog-motion-2.png'
 img2.setAttribute('class', 'img')
+const img3 = new Image()
+img3.src = 'https://i.ibb.co/Qnbb5Yg/dog-sit.png'
 const boneImage = new Image()
 boneImage.src = 'https://i.ibb.co/TkpqhJs/bone.png'
 const lion = new Image()
@@ -68,17 +106,37 @@ const currentFrameTime = 0
 const cloud = new Image()
 cloud.src = 'https://i.ibb.co/Bw3gt6c/cloud.png'
 
+const MaruSit = {
+    x : 10,
+    y : 250,
+    width : 60,
+    height : 50,
+    running: true,
+    draw() {
+        if (this.running === true){
+        ctx.drawImage(img3, this.x, this.y)
+        dispQuote()
+        quote()
+        setTimeout(() => {
+            this.running = false     
+        }, 4000)
+        } else {
+        ctx.clearRect(0,0, canvas.width, canvas.height)
+        cancelAnimationFrame(animation)
+        playFrames()
+    }}
+}
+
 const Maru = {
     x : 10,
     y : 250,
     width : 60,
     height : 50,
     running: true,
-    runningTime: 0,
     draw() {
         if (this.running === true){
-        ctx.fillStyle = 'yellow'
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        // ctx.fillStyle = 'yellow'
+        // ctx.fillRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(img1, this.x, this.y)
         setTimeout(() => {
             this.running = false     
@@ -151,6 +209,16 @@ function startJump(e) {
     }
 }
 
+function playInit() {
+    animation = requestAnimationFrame(playInit)
+    
+    ctx.clearRect(0,0, canvas.width, canvas.height)
+    
+    makeGround()
+    canvas.style.display = 'block'
+    MaruSit.draw()
+}
+
 function playFrames() {
 
    animation = requestAnimationFrame(playFrames)
@@ -208,17 +276,17 @@ function playFrames() {
         if(bone.x < 0){
             o.splice(i, 1)
         }
-        bone.x -= 7
+        bone.x -= 6
 
         getBone(Maru, bone)
 
         bone.draw()
     })
-    console.log(Maru.y);
+   
     if (jumping == true){
         document.removeEventListener('keydown', startJump)
         // console.log("Jumping is true")
-        Maru.y-=5
+        Maru.y-= 6
         jumpTimer++
     }
     if (jumpTimer > 25){
@@ -269,8 +337,8 @@ function pointsAlert() {
 const getBone = (Maru, bone) => {
     xGap = bone.x - (Maru.x + Maru.width)
     yGap = bone.y - (Maru.y + Maru.height)
-    console.log("xGap: ", xGap);
-    console.log("yGap: ", yGap);
+    // console.log("xGap: ", xGap);
+    // console.log("yGap: ", yGap);
     // if((xGap < 0 && xGap > -20) && yGap === 0) {
     if (xGap < 0 && yGap < 0) {
         // console.log('getting bone');
@@ -281,16 +349,13 @@ const getBone = (Maru, bone) => {
     }
 }
 
-console.log(points)
-
 startBtn.addEventListener('click', () => {
     board.style.display = 'none'
     pointBox.style.display = 'block'
-    playFrames()
+    playInit()
 })
 
 restartBtn2.addEventListener('click', () => {
-    console.log('clicked');
     restartBtn2.style.display = 'none'
     timer = 0
     jumpTimer = 0
