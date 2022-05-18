@@ -37,7 +37,6 @@ const restartIcon = document.createElement('i')
 restartIcon.setAttribute('class', 'fa-solid fa-rotate-right')
 restartBtn.appendChild(restartIcon)
 const restartBtn2 = document.querySelector('#restart')
-console.log(restartBtn2);
 
 function makeImageBoxes(num) {
     for(i = 0 ; i < num ; i++) {
@@ -59,8 +58,8 @@ body.appendChild(canvas)
 
 function drawBubble(ctx, x, y, w, h, radius)
 {
-  var r = x + w;
-  var b = y + h;
+  let r = x + w;
+  let b = y + h;
   ctx.beginPath();
   ctx.strokeStyle="grey";
   ctx.lineWidth="1";
@@ -292,7 +291,7 @@ function playFrames() {
         if(bone.x < 0){
             o.splice(i, 1)
         }
-        bone.x -= 6
+        bone.x -= 8
 
         getBone(Maru, bone)
 
@@ -349,7 +348,8 @@ document.body.appendChild(pointBox)
 pointBox.innerText = `Total Points: ${points}`
 
 function pointsAlert() {
-    ctx.fillText("+100", 50, 230)
+    ctx.font = "8px roboto"
+    ctx.fillText("+100", 105, 170)
 }
 
 const getBone = (Maru, bone) => {
@@ -376,6 +376,8 @@ startBtn.addEventListener('click', () => {
 
 restartBtn2.addEventListener('click', () => {
     restartBtn2.style.display = 'none'
+    board.style.display = 'none'
+    container.style.display = 'none'
     timer = 0
     jumpTimer = 0
     points = 0
