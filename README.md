@@ -8,7 +8,7 @@ You can check it over [here](https://the-journey-of-maru.netlify.app/).
 HTML/CSS & JavaScript
 
 ### Wireframe
-<img width="600" alt="The Journey of Maru Wireframe" src="https://media.git.generalassemb.ly/user/42646/files/88569f80-d2b3-11ec-8bc4-c6db8c34afdc">
+<img width="600" alt="The Journey of Maru Wireframe" src="https://i.ibb.co/tHZZWjJ/88569f80-d2b3-11ec-8bc4-c6db8c34afdc.png">
 
 ### Goal as a user
 - As a user, I would like to start the game after I click a 'start' button. 
