@@ -14,7 +14,7 @@ board.style.flexDirection = 'column'
 board.style.alignItems = 'center'
 
 const maruImg = document.createElement('img')
-maruImg.src = 'https://gcdnb.pbrd.co/images/CSE9TUuhTBWr.jpg?o=1'
+maruImg.src = './Maru.jpeg'
 maruImg.setAttribute('id','maru_image')
 board.appendChild(maruImg)
 
@@ -317,10 +317,7 @@ function playFrames() {
             document.addEventListener('keydown', startJump)
         }
     } 
-    // while (landingTimer < 25){
-    //     jumping = false;
-    //     landingTimer = 0;
-    // }
+   
     canvas.style.display = 'block'
     Maru.draw()
 }
