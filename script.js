@@ -44,7 +44,7 @@ function makeImageBoxes(num) {
         container.appendChild(cell)
         cell.setAttribute('class', 'imageBox')
         cell.setAttribute('id', `img${i}`)
-        cell.src = 'https://i.ibb.co/Qnbb5Yg/dog-sit.png'
+        cell.src = './dog sit.png'
     }
 }
 makeImageBoxes(10)
@@ -103,17 +103,17 @@ canvas.width = window.innerWidth - 500
 canvas.height = window.innerHeight -300
 
 const img1 = new Image()
-img1.src = 'https://www.linkpicture.com/q/dog.png'
+img1.src = './dog.png'
 const img2 = new Image()
-img2.src = 'https://i.ibb.co/CBcLGZn/dog-motion-2.png'
+img2.src = './dog motion 2.png'
 img2.setAttribute('class', 'img')
 const img3 = new Image()
-img3.src = 'https://i.ibb.co/Qnbb5Yg/dog-sit.png'
+img3.src = './dog sit.png'
 img3.setAttribute('id', 'img3')
 const boneImage = new Image()
-boneImage.src = 'https://i.ibb.co/TkpqhJs/bone.png'
+boneImage.src = './bone.png'
 const lion = new Image()
-lion.src = 'https://i.ibb.co/FhnHnsm/lionface.png'
+lion.src = './lion.png'
 const imageFrameCount = 2
 const frameTime = 100
 const currentFrameTime = 0
